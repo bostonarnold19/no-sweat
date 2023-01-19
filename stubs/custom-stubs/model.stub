@@ -1,0 +1,30 @@
+<?php
+
+namespace Modules\{{MODULE}}\Entities;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
+
+class {{MODEL}} extends Model
+{
+    use HasFactory, Sortable;
+
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
+    ];
+
+    /**
+     * @var int
+     */
+    protected $perPage = 20;
+
+    /**
+     * @var array|string[]
+     */
+    protected array $sortable = [
+        'id',
+    ];
+}

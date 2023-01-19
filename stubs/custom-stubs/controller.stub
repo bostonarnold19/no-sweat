@@ -1,0 +1,105 @@
+<?php
+
+namespace Modules\{{MODULE}}\Http\Controllers;
+
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
+use Modules\{{MODULE}}\Entities\{{MODEL}};
+use Modules\{{MODULE}}\Http\Requests\{{MODEL}}\Store{{MODEL}}Request;
+use Modules\{{MODULE}}\Http\Requests\{{MODEL}}\Update{{MODEL}}Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class {{MODEL}}Controller extends Controller
+{
+    use AuthorizesRequests;
+    
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+        $this->authorizeResource({{MODEL}}::class);
+    }
+
+    /**
+     * @return Factory|View|Application
+     */
+    public function index(): Factory|View|Application
+    {
+        ${{VARIABLE_PLURAL}} = {{MODEL}}::sortable()->paginate();
+
+        return view('{{MODULE_VIEW}}::{{MODEL_VIEW}}.index', compact('{{VARIABLE_PLURAL}}'));
+    }
+
+    /**
+     * @return Factory|View|Application
+     */
+    public function create(): Factory|View|Application
+    {
+        ${{VARIABLE}} = new {{MODEL}};        
+        return view('{{MODULE_VIEW}}::{{MODEL_VIEW}}.create', compact('{{VARIABLE}}'));
+    }
+
+    /**
+     * @param Store{{MODEL}}Request $request
+     * @return RedirectResponse
+     */
+    public function store(Store{{MODEL}}Request $request): RedirectResponse
+    {
+        $sanitized = $request->getSanitized();
+
+        {{MODEL}}::create($sanitized);
+
+        return redirect()->route('{{ROUTE}}.index')
+            ->with('success', '{{TITLE}} created successfully.');
+    }
+
+    /**
+     * @param {{MODEL}} ${{VARIABLE}}
+     * @return Factory|View|Application
+     */
+    public function show({{MODEL}} ${{VARIABLE}}): Factory|View|Application
+    {
+        return view('{{MODULE_VIEW}}::{{MODEL_VIEW}}.show', compact('{{VARIABLE}}'));
+    }
+
+    /**
+     * @param {{MODEL}} ${{VARIABLE}}
+     * @return Factory|View|Application
+     */
+    public function edit({{MODEL}} ${{VARIABLE}}): Factory|View|Application
+    {
+        return view('{{MODULE_VIEW}}::{{MODEL_VIEW}}.edit', compact('{{VARIABLE}}'));
+    }
+
+    /**
+     * @param Update{{MODEL}}Request $request
+     * @param {{MODEL}} ${{VARIABLE}}
+     * @return RedirectResponse
+     */
+    public function update(Update{{MODEL}}Request $request, {{MODEL}} ${{VARIABLE}}): RedirectResponse
+    {
+        $sanitized = $request->getSanitized();
+        
+        ${{VARIABLE}}->update($sanitized);
+
+        return redirect()->route('{{ROUTE}}.edit', [${{VARIABLE}}])
+            ->with('success', '{{TITLE}} updated successfully');
+    }
+
+    /**
+     * @param {{MODEL}} ${{VARIABLE}}
+     * @return RedirectResponse
+     */
+    public function destroy({{MODEL}} ${{VARIABLE}}): RedirectResponse
+    {
+        ${{VARIABLE}}->delete();
+
+        return redirect()->route('{{ROUTE}}.index')
+            ->with('success', '{{TITLE}} deleted successfully');
+    }
+}
